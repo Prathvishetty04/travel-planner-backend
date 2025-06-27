@@ -17,6 +17,7 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
     public Long getTripId() {
         return tripId;
