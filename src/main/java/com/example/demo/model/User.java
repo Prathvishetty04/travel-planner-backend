@@ -18,6 +18,7 @@ public class User {
     private String authMethod;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Trip> trips;
 
     // Getters and Setters
