@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +18,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        if (userService.usernameExists(user.getUsername())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
+        }
+        // Since using NoOpPasswordEncoder, do not encode password
+        user.setPassword(user.getPassword());
+        User savedUser = userService.createUser(user);
+        return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping

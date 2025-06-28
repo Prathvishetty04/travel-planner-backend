@@ -9,35 +9,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/trips")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class TripController {
 
     @Autowired
     private TripService tripService;
 
-    @PostMapping
-    public Trip createTrip(@RequestBody Trip trip) {
-        return tripService.createTrip(trip);
+    @GetMapping("/user/{userId}")
+    public List<Trip> getUserTrips(@PathVariable Long userId) {
+        return tripService.getAllTripsByUser(userId);
     }
 
-    @GetMapping
-    public List<Trip> getAllTrips() {
-        return tripService.getAllTrips();
+    @PostMapping("/user/{userId}")
+    public Trip createTrip(@PathVariable Long userId, @RequestBody Trip trip) {
+        return tripService.addTrip(trip, userId);
     }
 
-    @PutMapping("/{id}")
-    public Trip updateTrip(@PathVariable Long id, @RequestBody Trip updatedTrip) {
-        return tripService.updateTrip(id, updatedTrip);
+    @PutMapping("/{tripId}/user/{userId}")
+    public Trip updateTrip(@PathVariable Long tripId, @PathVariable Long userId, @RequestBody Trip updated) {
+        return tripService.updateTrip(tripId, updated, userId);
     }
 
-
-    @GetMapping("/{id}")
-    public Trip getTripById(@PathVariable Long id) {
-        return tripService.getTripById(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteTrip(@PathVariable Long id) {
-        tripService.deleteTrip(id);
+    @DeleteMapping("/{tripId}/user/{userId}")
+    public void deleteTrip(@PathVariable Long tripId, @PathVariable Long userId) {
+        tripService.deleteTrip(tripId, userId);
     }
 }

@@ -14,8 +14,18 @@ public class Itinerary {
     private String activityTime;
 
     @ManyToOne
-    @JoinColumn(name = "trip_id")
+    @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
+
+    // Constructors
+    public Itinerary() {}
+
+    public Itinerary(String activityName, String activityDate, String activityTime, Trip trip) {
+        this.activityName = activityName;
+        this.activityDate = activityDate;
+        this.activityTime = activityTime;
+        this.trip = trip;
+    }
 
     // Getters and Setters
     public Long getItineraryId() {

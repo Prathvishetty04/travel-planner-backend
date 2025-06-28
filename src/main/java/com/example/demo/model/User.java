@@ -2,11 +2,11 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 @Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -14,15 +14,20 @@ public class User {
     private String name;
     private String email;
     private String username;
+
+    @JsonIgnore // Don't expose password in API responses
     private String password;
+
     private String authMethod;
+
+    private String role; // e.g., "ROLE_ADMIN", "ROLE_USER"
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Trip> trips;
 
-    // Getters and Setters
-    // Add below your @Entity class definition
+// Getters and Setters
+
     public Long getUserId() {
         return userId;
     }
@@ -71,6 +76,14 @@ public class User {
         this.authMethod = authMethod;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public List<Trip> getTrips() {
         return trips;
     }
@@ -80,3 +93,5 @@ public class User {
     }
 
 }
+
+

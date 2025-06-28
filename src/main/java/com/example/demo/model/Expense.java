@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+
 @Entity
 public class Expense {
 
@@ -11,10 +12,15 @@ public class Expense {
 
     private String category;
     private double amount;
-
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
+
+    // 👇 Add this to associate expense with the user who created it
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Long getExpenseId() {
         return expenseId;
     }

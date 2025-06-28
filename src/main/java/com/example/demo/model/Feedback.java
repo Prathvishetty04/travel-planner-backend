@@ -11,14 +11,15 @@ public class Feedback {
 
     private String comment;
     private int rating;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     // Getters and Setters
     public Long getFeedbackId() {

@@ -4,21 +4,20 @@ import jakarta.persistence.*;
 
 @Entity
 public class Hotel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hotelId;
 
-    private String hotelName;
-    private String location;
-    private String checkInDate;
-    private String checkOutDate;
+    private String name;
+    private String address;
+    private String contactInfo;
 
     @ManyToOne
-    @JoinColumn(name = "trip_id")
-    private Trip trip;
+    @JoinColumn(name = "destination_id")
+    private Destination destination;
 
-    // Getters and Setters
+// Getters and Setters
+
     public Long getHotelId() {
         return hotelId;
     }
@@ -27,44 +26,36 @@ public class Hotel {
         this.hotelId = hotelId;
     }
 
-    public String getHotelName() {
-        return hotelName;
+    public String getName() {
+        return name;
     }
 
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getCheckInDate() {
-        return checkInDate;
+    public String getContactInfo() {
+        return contactInfo;
     }
 
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
-    public String getCheckOutDate() {
-        return checkOutDate;
+    public Destination getDestination() {
+        return destination;
     }
 
-    public void setCheckOutDate(String checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    public Trip getTrip() {
-        return trip;
-    }
-
-    public void setTrip(Trip trip) {
-        this.trip = trip;
+    public void setDestination(Destination destination) {
+        this.destination = destination;
     }
 
 }

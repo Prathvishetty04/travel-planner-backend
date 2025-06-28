@@ -3,21 +3,26 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
-
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private PasswordEncoder passwordEncoder;
+
+    public boolean usernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
     public User createUser(User user) {
+        // Password should be encoded before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -30,19 +35,28 @@ public class UserService {
     }
 
     public User updateUser(Long id, User updatedUser) {
-        User existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser != null) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
             existingUser.setName(updatedUser.getName());
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setUsername(updatedUser.getUsername());
-            existingUser.setPassword(updatedUser.getPassword());
             existingUser.setAuthMethod(updatedUser.getAuthMethod());
+            existingUser.setRole(updatedUser.getRole());
+
+            // Update password if provided (optional logic)
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
             return userRepository.save(existingUser);
+        } else {
+            return null;
         }
-        return null;
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
 }
